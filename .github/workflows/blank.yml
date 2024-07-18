@@ -1,0 +1,44 @@
+name: Merge DataEngineer Branches
+
+on:
+  push:
+    branches:
+      - DataEngineer1
+      - DataEngineer2
+
+jobs:
+  merge-branches:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+
+      - name: Merge DataEngineer1 into main
+        if: github.ref == 'refs/heads/DataEngineer1'
+        uses: actions/github-script@v4
+        with:
+          script: |
+            github.rest.repos.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              base: 'main',
+              head: 'DataEngineer1'
+            })
+
+      - name: Merge DataEngineer2 into main
+        if: github.ref == 'refs/heads/DataEngineer2'
+        uses: actions/github-script@v4
+        with:
+          script: |
+            github.rest.repos.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              base: 'main',
+              head: 'DataEngineer2'
+            })
