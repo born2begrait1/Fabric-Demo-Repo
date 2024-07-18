@@ -1,0 +1,43 @@
+name: Merge DataEngineer Branches to Main
+
+on:
+  push:
+    branches:
+      - DataEngineer1
+      - DataEngineer2
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v2
+      with:
+        ref: main
+
+    - name: Configure Git
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+    - name: Checkout DataEngineer1 branch
+      run: git checkout DataEngineer1
+
+    - name: Merge DataEngineer1 branch into main
+      run: |
+        git checkout main
+        git merge --no-ff DataEngineer1
+        git push origin main
+
+    - name: Checkout DataEngineer2 branch
+      run: git checkout DataEngineer2
+
+    - name: Merge DataEngineer2 branch into main
+      run: |
+        git checkout main
+        git merge --no-ff DataEngineer2
+        git push origin main
+
+    - name: Notify about merge
+      run: echo "Merging of DataEngineer1 and DataEngineer2 into main is complete."
